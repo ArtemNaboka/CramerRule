@@ -20,6 +20,7 @@ namespace CramerRule
             IEquationSolver parallelSolver = new ParallelEquationSolver();
 
             IEquationSolver choleskySolver = new CholeskySolver();
+            IEquationSolver parallelCholeskySolver = new ParallelCholeskySolver();
 
             int[] sizes = { 10, 100, 500 };
 
@@ -35,6 +36,10 @@ namespace CramerRule
             Console.WriteLine();
             Console.WriteLine("Sequential Cholesky:");
             await PerformTesting(sizes, provider, saver, choleskySolver);
+
+            Console.WriteLine();
+            Console.WriteLine("Parallel Cholesky:");
+            await PerformTesting(sizes, provider, saver, parallelCholeskySolver);
         }
 
         private static async Task PerformTesting(

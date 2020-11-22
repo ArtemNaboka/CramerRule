@@ -85,11 +85,10 @@ namespace CramerRule.Solvers.Cholesky
 
             for (int i = 0; i < rows; i++)
             {
-                decomposedL[i] = new double[i + 1]; //L - треугольная матрица, поэтому в i-ой строке i+1 элементов
+                decomposedL[i] = new double[i + 1];
 
                 double temp;
-                //Сначала вычисляем значения элементов слева от диагонального элемента,
-                //так как эти значения используются при вычислении диагонального элемента.
+
                 for (int j = 0; j < i; j++)
                 {
                     temp = 0;
@@ -101,7 +100,6 @@ namespace CramerRule.Solvers.Cholesky
                     decomposedL[i][j] = (matrix[i, j] - temp) / decomposedL[j][j];
                 }
 
-                //Находим значение диагонального элемента
                 temp = matrix[i, i];
                 for (int k = 0; k < i; k++)
                 {
