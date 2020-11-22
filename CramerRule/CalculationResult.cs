@@ -11,6 +11,6 @@ namespace CramerRule
         }
 
         public Matrix Matrix { get; }
-        public double[] Answers { get; }
+        public double[] Answers { get; set; }
     }
 }

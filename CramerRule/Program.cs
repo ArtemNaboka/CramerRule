@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using CramerRule.Solvers;
+using CramerRule.Solvers.Cholesky;
 
 namespace CramerRule
 {
@@ -17,16 +18,23 @@ namespace CramerRule
 
             IEquationSolver sequentialSolver = new EquationSolver();
             IEquationSolver parallelSolver = new ParallelEquationSolver();
-            // Matrix matrix = GetTestMatrix();
+
+            IEquationSolver choleskySolver = new CholeskySolver();
 
             int[] sizes = { 10, 100, 500 };
 
-            Console.WriteLine("Sequential:");
+            sequentialSolver.Solve(GetTestMatrix());
+
+            Console.WriteLine("Sequential Cramer:");
             await PerformTesting(sizes, provider, saver, sequentialSolver);
 
             Console.WriteLine();
-            Console.WriteLine("Parallel:");
+            Console.WriteLine("Parallel Cramer:");
             await PerformTesting(sizes, provider, saver, parallelSolver);
+
+            Console.WriteLine();
+            Console.WriteLine("Sequential Cholesky:");
+            await PerformTesting(sizes, provider, saver, choleskySolver);
         }
 
         private static async Task PerformTesting(
