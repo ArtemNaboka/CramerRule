@@ -41,6 +41,7 @@
     <ItemGroup>
         <Compile Include="CalculationResult.cs" />
         <Compile Include="Determinants\GaussDeterminantCalculator.cs" />
+        <Compile Include="Extensions\MatrixExtensions.cs" />
         <Compile Include="Matrix.cs" />
         <Compile Include="MatrixProvider.cs" />
         <Compile Include="Program.cs" />
@@ -50,6 +51,8 @@
         <Compile Include="Solvers\Cholesky\ParallelCholeskySolver.cs" />
         <Compile Include="Solvers\EquationSolver.cs" />
         <Compile Include="Solvers\IEquationSolver.cs" />
+        <Compile Include="Solvers\KDiagonal\DiagonalSolver.cs" />
+        <Compile Include="Solvers\KDiagonal\ParallelDiagonalSolver.cs" />
         <Compile Include="Solvers\ParallelEquationSolver.cs" />
     </ItemGroup>
     <ItemGroup>
