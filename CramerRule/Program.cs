@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using CramerRule.Extensions;
 using CramerRule.Solvers;
 using CramerRule.Solvers.Cholesky;
+using CramerRule.Solvers.Jacobi;
 using CramerRule.Solvers.KDiagonal;
 
 namespace CramerRule
@@ -26,6 +28,9 @@ namespace CramerRule
             IEquationSolver diagonalSolver = new DiagonalSolver();
             IEquationSolver parallelDiagonalSolver = new ParallelDiagonalSolver();
 
+            IEquationSolver jacobiSolver = new JacobiSolver();
+            IEquationSolver parallelJacobiSolver = new ParallelJacobiSolver();
+
             int[] sizes = { 10, 100, 500 };
 
             sequentialSolver.Solve(GetTestMatrix());
@@ -37,38 +42,64 @@ namespace CramerRule
             // Console.WriteLine("Parallel Cramer:");
             // await PerformTesting(sizes, provider, saver, parallelSolver);
 
-            Console.WriteLine();
-            Console.WriteLine("Sequential Cholesky:");
-            choleskySolver.Solve(GetTestMatrix());
-            await PerformTesting(sizes, provider, saver, choleskySolver);
+            // Console.WriteLine();
+            // Console.WriteLine("Sequential Cholesky:");
+            // choleskySolver.Solve(GetCholeskyTestMatrix());
+            // await PerformTesting(sizes, provider, saver, choleskySolver);
+            //
+            // Console.WriteLine();
+            // Console.WriteLine("Parallel Cholesky:");
+            // parallelSolver.Solve(GetCholeskyTestMatrix());
+            // await PerformTesting(sizes, provider, saver, parallelCholeskySolver);
+            //
+            // Console.WriteLine();
+            // Console.WriteLine("Sequential K-Diagonal:");
+            // diagonalSolver.Solve(GetDiagonalTestMatrix());
+            // await PerformTesting(sizes, provider, saver, diagonalSolver);
+            //
+            // Console.WriteLine();
+            // Console.WriteLine("Parallel K-Diagonal:");
+            // parallelDiagonalSolver.Solve(GetDiagonalTestMatrix2());
+            // await PerformTesting(sizes, provider, saver, parallelDiagonalSolver);
 
             Console.WriteLine();
-            Console.WriteLine("Parallel Cholesky:");
-            parallelSolver.Solve(GetTestMatrix());
-            await PerformTesting(sizes, provider, saver, parallelCholeskySolver);
+            Console.WriteLine("Sequential Jacobi on common matrix:");
+            jacobiSolver.Solve(GetDiagonalTestMatrix2());
+            await PerformTesting(sizes, provider, saver, jacobiSolver);
 
             Console.WriteLine();
-            Console.WriteLine("Sequential K-Diagonal:");
-            diagonalSolver.Solve(GetDiagonalTestMatrix());
-            await PerformTesting(sizes, provider, saver, diagonalSolver);
+            Console.WriteLine("Sequential Jacobi on chess matrix:");
+            jacobiSolver.Solve(GetDiagonalTestMatrix2());
+            await PerformTesting(sizes, provider, saver, jacobiSolver, matrix => matrix.ToChessZero());
 
             Console.WriteLine();
-            Console.WriteLine("Parallel K-Diagonal:");
-            parallelDiagonalSolver.Solve(GetDiagonalTestMatrix2());
-            await PerformTesting(sizes, provider, saver, parallelDiagonalSolver);
+            Console.WriteLine("Parallel Jacobi on common matrix:");
+            parallelJacobiSolver.Solve(GetDiagonalTestMatrix2());
+            await PerformTesting(sizes, provider, saver, parallelJacobiSolver);
+
+            Console.WriteLine();
+            Console.WriteLine("Parallel Jacobi on chess matrix:");
+            parallelJacobiSolver.Solve(GetDiagonalTestMatrix2());
+            await PerformTesting(sizes, provider, saver, parallelJacobiSolver, matrix => matrix.ToChessZero());
         }
 
         private static async Task PerformTesting(
             int[] sizes,
             MatrixProvider provider,
             ResultsSaver saver,
-            IEquationSolver solver)
+            IEquationSolver solver,
+            Action<Matrix> matrixAction = null)
         {
             Stopwatch stopwatch = new Stopwatch();
 
             foreach (int size in sizes)
             {
                 Matrix matrix = provider.GetMatrix(size);
+
+                if (matrixAction != null)
+                {
+                    matrixAction(matrix);
+                }
 
                 stopwatch.Start();
                 CalculationResult result = solver.Solve(matrix);
@@ -112,6 +143,24 @@ namespace CramerRule
             m.Results = new[]
             {
                 23, 119, 147, 80, 48
+            };
+
+            return m;
+        }
+
+        private static Matrix GetCholeskyTestMatrix()
+        {
+            Matrix m = new Matrix(3);
+            m.Variables = new[,]
+            {
+                { 81, -45, 45 },
+                { -45, 50, -15 },
+                { 45, -15, 38 },
+            };
+
+            m.Results = new[]
+            {
+                531, -460, 193
             };
 
             return m;

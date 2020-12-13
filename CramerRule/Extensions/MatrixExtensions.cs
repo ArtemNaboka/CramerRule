@@ -27,5 +27,21 @@ namespace CramerRule.Extensions
                 }
             }
         }
+
+        public static void ToChessZero(this Matrix matrix)
+        {
+            for (int i = 1; i < matrix.Size; i++)
+            {
+                int rest = i % 2;
+
+                for (int j = 0; j < i; j++)
+                {
+                    if (j % 2 != rest)
+                    {
+                        matrix.Variables[i, j] = 0;
+                    }
+                }
+            }
+        }
     }
 }

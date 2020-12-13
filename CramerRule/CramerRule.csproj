@@ -51,6 +51,8 @@
         <Compile Include="Solvers\Cholesky\ParallelCholeskySolver.cs" />
         <Compile Include="Solvers\EquationSolver.cs" />
         <Compile Include="Solvers\IEquationSolver.cs" />
+        <Compile Include="Solvers\Jacobi\JacobiSolver.cs" />
+        <Compile Include="Solvers\Jacobi\ParallelJacobiSolver.cs" />
         <Compile Include="Solvers\KDiagonal\DiagonalSolver.cs" />
         <Compile Include="Solvers\KDiagonal\ParallelDiagonalSolver.cs" />
         <Compile Include="Solvers\ParallelEquationSolver.cs" />
